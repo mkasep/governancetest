@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Board Member Exam Practice – BICG / OECD Corporate Governance</title>
+<style>
+:root{
+  --bg:#f5f6f8; --card:#fff; --text:#1b2330; --muted:#5d6878; --line:#dde1e8;
+  --accent:#1f4e8c; --accent-text:#fff; --good:#1b7f4b; --good-bg:#e4f5ec;
+  --bad:#b3261e; --bad-bg:#fbe9e7; --sel:#e8f0fb;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#10151d; --card:#19212c; --text:#e8ecf2; --muted:#9aa6b6; --line:#2b3645;
+    --accent:#6ea4ea; --accent-text:#0b1220; --good:#59d18d; --good-bg:#16352a;
+    --bad:#ff8a80; --bad-bg:#3a1d1b; --sel:#1f2d42;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.wrap{max-width:820px;margin:0 auto;padding:20px 16px 60px}
+h1{font-size:1.5rem;margin:.2em 0}
+h2{font-size:1.15rem;margin:1.2em 0 .5em}
+.sub{color:var(--muted);margin:0 0 1.2rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+button{font:inherit;cursor:pointer;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--text);padding:12px 16px}
+button:hover:not(:disabled){border-color:var(--accent)}
+button:disabled{opacity:.5;cursor:default}
+button.primary{background:var(--accent);color:var(--accent-text);border-color:var(--accent);font-weight:600}
+.size{font-size:1.4rem;font-weight:700;padding:18px 10px;text-align:center}
+.size small{display:block;font-size:.75rem;font-weight:400;color:var(--muted)}
+.size.on{background:var(--sel);border-color:var(--accent);outline:2px solid var(--accent)}
+.opt-row{display:flex;gap:16px;flex-wrap:wrap;margin:14px 0}
+label.radio{display:flex;gap:8px;align-items:flex-start;cursor:pointer}
+.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin:8px 0 16px}
+.bar>i{display:block;height:100%;background:var(--accent);width:0;transition:width .25s}
+.meta{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:.9rem}
+.cat{display:inline-block;font-size:.75rem;padding:2px 10px;border-radius:99px;background:var(--sel);color:var(--accent);margin-bottom:8px}
+.q{font-size:1.15rem;font-weight:600;margin:4px 0 14px}
+.answers{display:grid;gap:10px}
+.ans{display:flex;gap:12px;text-align:left;align-items:flex-start;width:100%;padding:12px 14px}
+.ans .k{flex:none;width:26px;height:26px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:.8rem;font-weight:700;color:var(--muted)}
+.ans.sel{background:var(--sel);border-color:var(--accent)}
+.ans.sel .k{background:var(--accent);color:var(--accent-text);border-color:var(--accent)}
+.ans.good{background:var(--good-bg);border-color:var(--good)}
+.ans.bad{background:var(--bad-bg);border-color:var(--bad)}
+.expl{margin-top:14px;padding:12px 14px;border-left:4px solid var(--accent);background:var(--sel);border-radius:6px;font-size:.95rem}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:18px;flex-wrap:wrap}
+.score{font-size:3rem;font-weight:800;line-height:1}
+.catrow{display:grid;grid-template-columns:1fr 70px;gap:4px 12px;align-items:center;margin:8px 0;font-size:.92rem}
+.catrow .bar{grid-column:1/-1;margin:0;height:6px}
+.rev{border-top:1px solid var(--line);padding:14px 0}
+.tag{font-weight:700}
+.tag.ok{color:var(--good)} .tag.no{color:var(--bad)} .tag.skip{color:var(--muted)}
+.hint{font-size:.85rem;color:var(--muted)}
+.dots{display:flex;flex-wrap:wrap;gap:4px;margin-top:14px}
+.dots button{width:28px;height:28px;padding:0;font-size:.7rem;border-radius:6px}
+.dots button.done{background:var(--sel);border-color:var(--accent)}
+.dots button.cur{outline:2px solid var(--accent)}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="start">
+    <h1>Board Member Exam Practice</h1>
+    <p class="sub">Unofficial practice questions inspired by the BICG board member programme and the G20/OECD Principles of Corporate Governance. All questions in English; every attempt draws a fresh random set.</p>
+    <div class="card">
+      <h2 style="margin-top:0">1. Number of questions</h2>
+      <div class="grid" id="sizes"></div>
+      <h2>2. Mode</h2>
+      <div class="opt-row">
+        <label class="radio"><input type="radio" name="mode" value="exam" checked> <span><b>Exam mode</b><br><span class="hint">Answers and explanations shown at the end; you can go back and change answers.</span></span></label>
+        <label class="radio"><input type="radio" name="mode" value="practice"> <span><b>Practice mode</b><br><span class="hint">Instant feedback and explanation after each question.</span></span></label>
+      </div>
+      <h2>3. Pass mark</h2>
+      <div class="opt-row">
+        <label class="radio"><span>Correct answers needed to pass:</span>
+          <input type="number" id="passmark" min="1" max="100" step="1" value="70" style="width:5em;font:inherit;padding:4px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--text)"> <span>%</span></label>
+      </div>
+      <button class="primary" id="go">Start test</button>
+      <p class="hint" id="bankinfo"></p>
+    </div>
+    <div class="card hint">
+      <b>How the questions are chosen.</b> The bank is split into topic areas (OECD principles, shareholder rights, board duties, risk and audit, remuneration, ESG and more). Each test draws evenly from every topic, prefers questions you have seen least often in this browser, then shuffles both question order and answer order. Results are not an official BICG score; the pass mark is adjustable (default 70%).
+    </div>
+  </div>
+
+  <div id="quiz" hidden>
+    <div class="meta"><span id="qcount"></span><span id="timer"></span></div>
+    <div class="bar"><i id="prog"></i></div>
+    <div class="card">
+      <span class="cat" id="qcat"></span>
+      <div class="q" id="qtext"></div>
+      <div class="answers" id="answers"></div>
+      <div class="expl" id="expl" hidden></div>
+      <div class="nav">
+        <button id="prev">← Previous</button>
+        <button class="primary" id="next">Next →</button>
+      </div>
+      <div class="dots" id="dots"></div>
+      <p class="hint">Keys: 1–4 select answer, ←/→ navigate.</p>
+    </div>
+    <button id="quit">Abandon test</button>
+  </div>
+
+  <div id="result" hidden>
+    <h1>Results</h1>
+    <div class="card">
+      <div class="score" id="rscore"></div>
+      <p id="rline" class="sub"></p>
+      <h2>By topic</h2>
+      <div id="rcats"></div>
+    </div>
+    <div class="nav" style="margin-bottom:16px">
+      <button class="primary" id="again">New test</button>
+      <button id="retrywrong">Retry only missed questions</button>
+      <label class="radio"><input type="checkbox" id="onlywrong"> <span>Show only missed in review</span></label>
+    </div>
+    <div class="card"><h2 style="margin-top:0">Review</h2><div id="review"></div></div>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* Each question: c = topic, q = text, a = [correct, wrong, wrong, wrong], e = explanation.
+   The correct answer is always listed first here and shuffled at runtime. */
+const TOPICS = {
+  OECD:"OECD Principles & Framework",
+  SH:"Shareholder Rights & Equitable Treatment",
+  BR:"Board Role & Responsibilities",
+  BS:"Board Structure, Independence & Committees",
+  DU:"Directors' Duties & Ethics",
+  RK:"Risk Management & Internal Control",
+  AU:"Audit, Reporting & Disclosure",
+  RM:"Remuneration",
+  ST:"Strategy, Sustainability & Stakeholders",
+  RP:"Conflicts, Related Parties & Control Transactions"
+};
+const BANK = [
+/* ---------- OECD ---------- */
+{c:"OECD",q:"What is the primary purpose of the G20/OECD Principles of Corporate Governance?",a:["To help policy makers evaluate and improve the legal, regulatory and institutional framework for corporate governance","To impose binding rules on all listed companies worldwide","To set mandatory accounting standards","To replace national company law"],e:"The Principles are a non-binding international benchmark that guides policy makers, regulators and market participants."},
+{c:"OECD",q:"What is the legal status of the G20/OECD Principles?",a:["Non-binding; they are a reference standard that countries adapt to their own context","Binding treaty obligations for OECD members","Directly enforceable regulations in the EU","Mandatory listing rules of every stock exchange"],e:"They are principle-based and non-binding, intended to be flexible and adaptable."},
+{c:"OECD",q:"Which body jointly endorsed the OECD Principles as a global benchmark in 2015 and 2023?",a:["The G20","The World Trade Organization","The International Court of Justice","The European Central Bank"],e:"The Principles are 'G20/OECD', endorsed by G20 leaders."},
+{c:"OECD",q:"According to the OECD, the corporate governance framework should promote:",a:["Transparent and fair markets and the efficient allocation of resources","Maximum short-term share price at any cost","Exclusive control by the largest shareholder","Minimal disclosure to protect company secrets"],e:"Principle I states the framework should promote transparent and fair markets and the efficient allocation of resources, consistent with the rule of law."},
+{c:"OECD",q:"Which statement best reflects the OECD approach to supervision and enforcement?",a:["Supervisory, regulatory and enforcement authorities should have the authority, integrity and resources to act professionally and objectively","Enforcement should be left entirely to company boards","Regulators should be funded by the companies they supervise without safeguards","Only criminal courts may enforce corporate governance rules"],e:"The framework needs clearly allocated responsibilities and well-resourced, independent authorities."},
+{c:"OECD",q:"The OECD Principles are described as 'outcome-oriented' and 'principle-based'. What does this mean in practice?",a:["They set objectives and leave the method of achieving them flexible","They prescribe exact board sizes and fees","They require identical rules in every country","They apply only to state-owned enterprises"],e:"The Principles describe what should be achieved, while allowing different ways of getting there."},
+{c:"OECD",q:"Which of the following is an area covered by the OECD Principles?",a:["Sustainability and resilience","Tax planning optimisation","Product pricing strategy","Employee payroll administration"],e:"The 2023 revision added a dedicated chapter on sustainability and resilience."},
+{c:"OECD",q:"Which topic did the 2023 revision of the Principles strengthen or newly address?",a:["Sustainability, climate-related risks and corporate resilience","The abolition of shareholder voting","A ban on institutional investors","A fixed cap on executive pay"],e:"The 2023 update responded to climate risk, sustainability disclosure, digitalisation and resilience."},
+{c:"OECD",q:"The OECD Principles apply primarily to which type of company?",a:["Publicly traded companies, financial and non-financial, though they can also be useful for others","Only family-owned micro firms","Only non-profit organisations","Only banks"],e:"They focus on publicly traded companies but are a useful benchmark for unlisted and state-owned companies."},
+{c:"OECD",q:"Why does the OECD stress the 'rule of law' in connection with corporate governance?",a:["Governance rules need to be consistent with law, transparent and enforceable","Because it replaces the need for company boards","Because the board must always follow the largest shareholder","Because it makes disclosure optional"],e:"Framework requirements should be consistent with the rule of law, transparent and enforceable."},
+{c:"OECD",q:"What does 'comply or explain' mean?",a:["A company either follows a governance code recommendation or discloses and justifies why it does not","A company must comply with every recommendation or be delisted","A company may ignore the code without saying anything","Only auditors must explain deviations"],e:"Comply-or-explain is the standard approach for governance codes, including the Estonian and many European codes."},
+{c:"OECD",q:"Which is the best description of corporate governance in the OECD context?",a:["A set of relationships between a company's management, board, shareholders and stakeholders that provides the structure for setting and monitoring objectives","The day-to-day operational management of a firm","The company's marketing structure","Only the contractual relationship with the auditor"],e:"The Principles define governance as a system of relationships and structures to set objectives and monitor performance."},
+
+/* ---------- Shareholders ---------- */
+{c:"SH",q:"Which of the following is a basic shareholder right under the OECD Principles?",a:["Secure methods of ownership registration, convey or transfer shares, and obtain relevant information on the company","The right to run daily operations","The right to veto every board decision","The right to a guaranteed dividend"],e:"Basic rights include registration, transfer, information, participation and voting at general meetings, electing board members and sharing in profits."},
+{c:"SH",q:"Shareholders should have the right to participate in and be sufficiently informed about decisions concerning:",a:["Fundamental corporate changes such as amendments to statutes, authorisation of additional shares and extraordinary transactions","Every operational purchase","Individual employee contracts","Daily cash management"],e:"Fundamental changes require shareholder approval or participation."},
+{c:"SH",q:"Which practice best supports effective shareholder participation in general meetings?",a:["Providing sufficient and timely information about the date, location and agenda and allowing shareholders to ask questions to the board","Giving the agenda on the day of the meeting","Restricting questions to the chair only","Holding meetings only at the head office with no remote option"],e:"Shareholders should have timely, adequate notice and be able to engage; modern practice includes remote participation."},
+{c:"SH",q:"Equitable treatment of shareholders means that:",a:["All shareholders of the same series of a class should be treated equally","All shareholders must hold equal numbers of shares","Minority shareholders cannot vote","Controlling shareholders choose the rules for others"],e:"Within any series of a class, all shares carry the same rights."},
+{c:"SH",q:"Which is a mechanism that protects minority shareholders from abusive self-dealing?",a:["Prohibitions and disclosure rules on related-party abuse, with effective redress","Allowing controlling shareholders to vote on their own transactions without disclosure","Removing independent directors","Banning shareholder questions"],e:"Minorities need protection from abusive actions by or in the interest of controlling shareholders, with effective means of redress."},
+{c:"SH",q:"Capital structures and arrangements that enable certain shareholders to obtain a degree of control disproportionate to their equity ownership should be:",a:["Disclosed","Kept secret","Required of all companies","Exempt from all rules"],e:"The OECD says such structures, including control enhancing mechanisms, should be disclosed."},
+{c:"SH",q:"What is a 'one share – one vote' structure?",a:["Voting power proportional to the number of shares held","Each shareholder gets one vote regardless of shares","Only the largest shareholder votes","Votes are allocated by the board"],e:"It aligns control with economic ownership; deviations (dual-class shares, pyramids) are control-enhancing mechanisms."},
+{c:"SH",q:"What is the main concern with dual-class share structures?",a:["Control may be separated from economic risk, weakening accountability to outside shareholders","They always raise the cost of capital to zero","They prevent dividends","They require the company to delist"],e:"Disproportionate control reduces the discipline of the market for control and may entrench insiders."},
+{c:"SH",q:"Votes at general meetings should be:",a:["Cast in a way that lets shareholders vote in person or in absentia with equal effect","Counted only if cast in person","Weighted by board seniority","Cast by management on behalf of all shareholders"],e:"Voting in person or in absentia should have equal effect."},
+{c:"SH",q:"The right of shareholders to nominate and elect board members is important because it:",a:["Gives owners a direct say in who oversees management","Removes the need for a nomination committee","Makes the CEO the chair","Guarantees board gender balance"],e:"Shareholder election of directors is a core ownership right and the basis of board accountability."},
+{c:"SH",q:"A shareholder agreement among a group of shareholders to act together should:",a:["Not be used to abuse minority shareholders and, where significant, be disclosed according to rules","Always be hidden from the market","Replace the company statutes","Be approved by the auditor"],e:"Shareholders may consult each other but should not use this to manipulate markets or abuse others."},
+{c:"SH",q:"Insider trading and market abuse rules are designed to:",a:["Ensure equal access to price-sensitive information and protect market integrity","Prevent employees from owning shares","Make dividend payments higher","Protect the board from liability"],e:"Insider trading and market manipulation undermine fair treatment and market confidence."},
+{c:"SH",q:"The OECD says institutional investors acting in a fiduciary capacity should disclose:",a:["Their corporate governance and voting policies and how they manage conflicts of interest","The salaries of their staff only","Nothing, because the information is private","Only the stocks they sold"],e:"Principle III calls for disclosure of voting policies and conflict management by institutional investors."},
+
+/* ---------- Board role ---------- */
+{c:"BR",q:"Which of the following is a key function of the board under the OECD Principles?",a:["Reviewing and guiding corporate strategy, major plans of action, risk management policies and business plans","Managing daily operations","Performing the external audit","Setting statutory accounting standards"],e:"The board guides strategy and monitors management; daily operations belong to management."},
+{c:"BR",q:"Which key board function relates to management oversight?",a:["Selecting, compensating, monitoring and, when necessary, replacing key executives and overseeing succession planning","Directly performing all executive tasks","Approving every supplier invoice","Running the share register"],e:"This is a core board function listed in the Principles."},
+{c:"BR",q:"The board should act on a fully informed basis, in good faith, with due diligence and care, and in the best interest of:",a:["The company and the shareholders, taking into account the interests of stakeholders","The CEO","The chair only","The largest creditor"],e:"The OECD wording is the best interest of the company and its shareholders, taking account of stakeholders."},
+{c:"BR",q:"The board's responsibility for 'tone at the top' means that it should:",a:["Set and model the ethical culture and values of the company","Delegate ethics entirely to HR","Avoid public statements about ethics","Leave culture to chance"],e:"The board is responsible for setting values and culture, and for overseeing compliance with them."},
+{c:"BR",q:"What is the main distinction between governance and management?",a:["The board oversees and sets direction; management implements and runs operations","The board runs operations; management oversees","They are identical","Management hires the shareholders"],e:"Role clarity prevents the board from becoming involved in operational details and prevents management from escaping oversight."},
+{c:"BR",q:"Which of the following is a board's duty concerning the CEO?",a:["Appoint, evaluate, set objectives for and, if needed, dismiss the CEO","Do the CEO's job during holidays","Elect the CEO's family members","Avoid formal appraisals"],e:"CEO selection, evaluation and succession are among the most important board tasks."},
+{c:"BR",q:"What should a well-functioning board do to ensure it receives accurate information?",a:["Have timely and direct access to management and information, and not rely only on what the CEO selects","Rely solely on verbal updates","Avoid asking for further documents","Receive board papers after the meeting"],e:"Board members should have access to accurate, relevant and timely information."},
+{c:"BR",q:"Board members should be able to commit themselves effectively to their responsibilities. This implies that:",a:["Service on too many boards may interfere with performance and should be disclosed or limited","Directors should hold at least ten board seats","Directors should avoid preparation to stay neutral","Attendance is optional"],e:"Overboarding is a concern; some codes cap the number of mandates."},
+{c:"BR",q:"The board should regularly review and approve:",a:["Corporate strategy, major capital expenditure, acquisitions and divestitures","Individual employee holiday plans","Internal office layout","Individual customer discounts"],e:"Major decisions and the overall strategic framework are for the board; day-to-day items are not."},
+{c:"BR",q:"What is the role of the corporate secretary or company secretary in good governance?",a:["Supporting the board with procedure, information flow, compliance and induction","Replacing the CEO","Setting remuneration alone","Auditing the accounts"],e:"The secretary assists the chair and board in ensuring that procedures are followed and information flows."},
+{c:"BR",q:"Which should be recorded in good board minutes?",a:["Decisions, key discussion points, conflicts declared and the basis of material decisions","Only attendance","Verbatim transcripts of all conversations","Nothing if the decision was unanimous"],e:"Minutes demonstrate diligence and decision rationale without becoming a transcript."},
+{c:"BR",q:"The chair of the board should primarily:",a:["Lead the board, set the agenda with the CEO and ensure effective and open debate","Run operations as CEO","Represent management to the board","Prepare the financial statements"],e:"The chair leads the board and ensures it functions effectively."},
+
+/* ---------- Structure ---------- */
+{c:"BS",q:"In a two-tier board system, such as the one used by an Estonian public limited company (aktsiaselts), the bodies are:",a:["A management board and a supervisory board","A single combined board only","A shareholder committee and an audit firm","A CEO and the registrar"],e:"Estonian public limited companies must have a supervisory board (nõukogu) and a management board (juhatus)."},
+{c:"BS",q:"In a one-tier (unitary) board system:",a:["Executive and non-executive directors sit together on the same board","The supervisory board is separate from the management board","There are no directors","The shareholders manage daily operations"],e:"The unitary model (e.g. UK/US) combines executives and non-executives in one board."},
+{c:"BS",q:"Why does the OECD recommend that boards consider assigning a sufficient number of non-executive members capable of exercising independent judgement?",a:["To ensure objective judgement on tasks where there is potential for conflicts of interest","To lower costs","Because executives cannot vote","To remove the need for committees"],e:"Independent non-executives are crucial for audit, related-party transactions and remuneration."},
+{c:"BS",q:"Which is most likely to compromise a director's independence?",a:["Being a former executive of the company who left only recently","Having a college degree","Being appointed through a formal nomination process","Holding a small number of shares"],e:"Recent employment or significant business relationships typically impair independence."},
+{c:"BS",q:"Which committee typically oversees financial reporting, internal control and the relationship with external auditors?",a:["Audit committee","Marketing committee","Social committee","Procurement committee"],e:"The audit committee supports the board's oversight of reporting, controls, internal audit and the external audit."},
+{c:"BS",q:"Which committee typically proposes candidates for the board and plans succession?",a:["Nomination committee","Audit committee","Risk committee only","IT committee"],e:"The nomination committee identifies qualified candidates and oversees succession."},
+{c:"BS",q:"Which committee typically recommends remuneration policy for executives and directors?",a:["Remuneration committee","Audit committee","Ethics committee only","Sales committee"],e:"The remuneration committee develops the policy and supports board decisions about pay."},
+{c:"BS",q:"Why should the audit committee be composed mainly or wholly of independent non-executive members?",a:["To ensure objective oversight of the financial reporting and audit process","To reduce the number of meetings","Because executives are unable to read accounts","Because laws prohibit executives from attending"],e:"Independence in the audit committee protects the integrity of reporting."},
+{c:"BS",q:"What does board diversity aim to improve?",a:["The range of skills, perspectives and experience available to the board, reducing groupthink","Only public relations","The number of committees","Management pay"],e:"Diversity (gender, experience, background, age) can improve decision quality."},
+{c:"BS",q:"A skills matrix helps the board to:",a:["Identify competence gaps and guide recruitment and training","Calculate dividends","Estimate tax","Evaluate suppliers"],e:"It maps board competencies to the strategy and risks of the company."},
+{c:"BS",q:"Why is a regular board evaluation recommended?",a:["To assess effectiveness of the board, its committees and individual directors and identify improvements","To avoid shareholder meetings","To reduce director liability to zero","To fix the CEO's pay"],e:"Annual evaluations (periodically externally facilitated) are standard in codes."},
+{c:"BS",q:"What is the main risk when the CEO is also the chair of the board?",a:["Concentration of power and weakened independent oversight of management","Higher audit fees by law","Shareholders lose voting rights","The company cannot hold board meetings"],e:"Separating the roles is widely recommended; where combined, a lead independent director is a safeguard."},
+{c:"BS",q:"The role of a lead (senior) independent director is to:",a:["Provide a point of contact for non-executives and shareholders and act as intermediary when the chair is conflicted","Replace the CEO","Audit the accounts","Manage investor relations alone"],e:"Common in unitary boards where the chair is not independent."},
+{c:"BS",q:"What is 'board refreshment' about?",a:["Planned renewal of board membership to keep skills current and avoid entrenchment","Redecorating the boardroom","Removing all directors every year","Changing auditors annually"],e:"Term limits and staggered terms are tools; there is a balance between continuity and fresh perspectives."},
+{c:"BS",q:"Why should new directors receive an induction?",a:["So they quickly understand the business, risks, governance framework and their duties","To replace the nomination process","To avoid formal appointments","To remove their liability"],e:"A structured induction accelerates their contribution."},
+
+/* ---------- Duties ---------- */
+{c:"DU",q:"The duty of care requires directors to:",a:["Act with the diligence and skill of a prudent person, based on adequate information","Always guarantee profits","Avoid all risk","Delegate every decision to the CEO"],e:"The duty of care concerns diligence, preparation and informed decision-making."},
+{c:"DU",q:"The duty of loyalty requires directors to:",a:["Act in the interest of the company and avoid conflicts of interest and personal gain at its expense","Be loyal to the CEO","Support the controlling shareholder under all circumstances","Support colleagues on the board unconditionally"],e:"Loyalty means putting the company's interests ahead of personal interests."},
+{c:"DU",q:"What does the 'business judgment rule' typically protect?",a:["Directors who make informed, good-faith decisions without conflict from liability for outcomes that turn out badly","Directors who ignore information","Directors acting for personal gain","Directors who do not attend meetings"],e:"Courts defer to honest, informed business decisions; they do not protect negligent or conflicted ones."},
+{c:"DU",q:"Which action most clearly breaches a director's duty of loyalty?",a:["Diverting a business opportunity of the company to oneself","Voting against a proposal after informed debate","Asking for more information","Resigning due to disagreement"],e:"Usurping corporate opportunities is a classic breach."},
+{c:"DU",q:"A director learns of confidential company information. What is the correct approach?",a:["Use it only for company purposes and not for personal trading or disclosure","Share it with friends to receive advice","Trade ahead of the announcement","Publish it online"],e:"Directors owe confidentiality and must not trade on inside information."},
+{c:"DU",q:"What is the proper response if a director has a personal interest in a matter on the agenda?",a:["Disclose it, and abstain from discussion and voting as required by rules","Stay silent and vote","Vote in favour to show support","Ask the CEO to hide it in the minutes"],e:"Transparency and recusal are the standard safeguards."},
+{c:"DU",q:"Why is attending meetings prepared a matter of governance rather than courtesy?",a:["Informed participation is part of the duty of care","Attendance gives bonus pay by law","Meetings can be replaced by emails","It is only a custom"],e:"Inadequate preparation can be a breach of the duty of care."},
+{c:"DU",q:"Which describes a whistleblowing policy?",a:["A channel for employees and others to report misconduct safely, with protection against retaliation","A policy banning internal reports","A policy where the CEO decides who may speak","A policy for investor relations only"],e:"Boards should ensure effective, protected reporting channels (cf. EU Whistleblower Directive 2019/1937)."},
+{c:"DU",q:"Who should receive reports about misconduct involving top management in a well-designed whistleblowing system?",a:["A channel independent of the implicated management, such as the audit committee or chair","Only the person who is reported","The CEO exclusively","No one, until the media reports"],e:"Routing reports to an independent body avoids conflicts."},
+{c:"DU",q:"What is a code of ethics / conduct for?",a:["Setting standards of integrity and expected behaviour for directors, managers and employees","Setting the share price","Replacing the law","Defining the board's pay"],e:"It supports ethical culture, anti-corruption and compliance."},
+{c:"DU",q:"Gifts and hospitality offered to directors should be:",a:["Governed by clear policy, declared and kept within limits to avoid undue influence","Always accepted","Hidden from the board","Unlimited if the donor is a customer"],e:"Anti-bribery and conflict policies require transparency and limits."},
+{c:"DU",q:"Can directors rely on advice from experts and management?",a:["Yes, if they do so in good faith after reasonable inquiry and critical assessment","Never","Always blindly","Only if the expert is also a shareholder"],e:"Reasonable reliance is protected; blind reliance is not."},
+{c:"DU",q:"Directors' liability insurance (D&O) normally does NOT cover:",a:["Deliberate fraud or dishonest acts","Negligent mistakes","Legal defence costs","Claims by shareholders for ordinary mismanagement"],e:"Intentional wrongdoing is typically excluded."},
+
+/* ---------- Risk ---------- */
+{c:"RK",q:"Which statement best describes the board's role in risk management?",a:["It should set risk appetite and ensure that effective risk management and internal control systems exist and are monitored","It should manage each risk personally","It should leave risk entirely to the auditors","It should avoid discussing risk"],e:"Boards oversee risk; management runs it."},
+{c:"RK",q:"Risk appetite is:",a:["The amount and type of risk a company is willing to accept in pursuit of its objectives","The total losses a company had last year","A type of insurance","An accounting standard"],e:"Appetite and tolerance should be aligned with strategy."},
+{c:"RK",q:"In the 'three lines' model, which function is the 'first line'?",a:["Operational management that owns and manages risks and controls","Internal audit","The external auditor","The regulator"],e:"First line: management; second line: risk and compliance functions; third line: internal audit."},
+{c:"RK",q:"In the 'three lines' model, internal audit is the:",a:["Third line, providing independent assurance","First line","Second line","External line"],e:"Internal audit gives independent, objective assurance to the board."},
+{c:"RK",q:"To maintain independence, the head of internal audit should have:",a:["Direct access to the audit committee or board and a functional reporting line to it","A reporting line only to the CFO with no board access","Responsibility for operational decisions","No access to company records"],e:"Functional reporting to the audit committee protects objectivity."},
+{c:"RK",q:"Which of these is an example of a strategic risk?",a:["A competitor introducing disruptive technology that undermines the business model","A routine invoice error","A broken printer","A typo in a memo"],e:"Strategic risks relate to the choice and execution of strategy and the business environment."},
+{c:"RK",q:"A risk register is used to:",a:["Record identified risks, their assessment, owners and mitigating actions","Record share transfers","Track dividend payments","Register trademarks"],e:"It supports systematic monitoring by management and the board."},
+{c:"RK",q:"Which describes 'inherent' versus 'residual' risk?",a:["Inherent risk is before controls; residual risk remains after controls","Inherent risk is after controls; residual is before","They are the same","Residual risk is always zero"],e:"Residual risk is what remains after considering mitigation."},
+{c:"RK",q:"A business continuity plan is meant to:",a:["Ensure critical operations can continue or be restored after a disruption","Increase tax","Select a new auditor","Prepare the annual meeting"],e:"Resilience planning is increasingly emphasised by OECD."},
+{c:"RK",q:"Cybersecurity is best treated as:",a:["A board-level risk requiring oversight, clear accountability and incident-response readiness","A purely technical issue for IT","An issue only for banks","A minor compliance item"],e:"Cyber risk can threaten the viability of the company, so boards oversee it."},
+{c:"RK",q:"What is an 'internal control' framework?",a:["Processes designed to provide reasonable assurance regarding objectives of effective operations, reliable reporting and compliance","A guarantee that no errors ever occur","An optional marketing tool","A tax scheme"],e:"Controls give reasonable (not absolute) assurance (COSO definition)."},
+{c:"RK",q:"A compliance function primarily helps the company to:",a:["Identify, assess and manage the risk of failing to meet legal and regulatory obligations","Maximise profit margins","Prepare marketing campaigns","Select board members"],e:"Compliance is a second line function."},
+{c:"RK",q:"Which of the following indicates a weak control environment?",a:["Management override of controls without scrutiny","Regular reconciliations","Segregation of duties","Independent review of high-risk transactions"],e:"Management override is a classic fraud risk."},
+{c:"RK",q:"Segregation of duties means:",a:["Different people authorise, record and handle assets so no one controls a whole transaction","One person approves and pays every invoice","Only the CEO signs","Duties are not defined"],e:"It reduces the risk of error and fraud."},
+
+/* ---------- Audit/disclosure ---------- */
+{c:"AU",q:"Which information should companies disclose according to the OECD Principles?",a:["Financial and operating results, objectives, major share ownership, remuneration of board and key executives, related-party transactions and risk factors","Only profit","Only the CEO's biography","Trade secrets and all contracts"],e:"Disclosure should be material and cover financial, governance and non-financial matters."},
+{c:"AU",q:"The main purpose of an external audit is to:",a:["Provide an independent opinion on whether the financial statements present a true and fair view","Prepare the financial statements for management","Run the internal control system","Select the board members"],e:"The auditor expresses an independent opinion; management prepares the statements."},
+{c:"AU",q:"Who is responsible for the preparation of the financial statements?",a:["Management, with oversight by the board","The external auditor","The tax authority","The shareholders"],e:"Preparation is management's responsibility; the auditor's role is to opine."},
+{c:"AU",q:"To safeguard auditor independence, the audit committee should:",a:["Review the scope of non-audit services and approve them where permitted","Allow unlimited consulting work by the auditor","Let management alone decide on audit fees","Replace the auditor every month"],e:"Non-audit services can create self-review and advocacy threats."},
+{c:"AU",q:"Which is generally best practice regarding auditor appointment?",a:["The audit committee recommends and shareholders approve the external auditor","The CEO unilaterally appoints and dismisses the auditor","The auditor appoints itself","The auditor is chosen by the largest supplier"],e:"Independent selection process supports audit quality."},
+{c:"AU",q:"What does a 'qualified opinion' by the auditor indicate?",a:["The financial statements are fair except for a specific material matter","The audit was cancelled","There are no issues","The auditor refuses to work with the board"],e:"A qualified opinion signals material issues limited to specific items."},
+{c:"AU",q:"Which audit opinion indicates that the statements are NOT fairly presented in all material respects?",a:["Adverse opinion","Unmodified opinion","Emphasis of matter","Key audit matter"],e:"An adverse opinion is the most serious type."},
+{c:"AU",q:"What are 'key audit matters' (KAMs)?",a:["Matters of most significance in the audit, communicated in the auditor's report for listed entities","Matters decided by the CEO","Items about marketing","A summary of the board minutes"],e:"KAMs increase transparency about the audit."},
+{c:"AU",q:"What does 'going concern' refer to?",a:["The assumption that the company will continue operating for the foreseeable future","A company that is expanding abroad","A takeover bid","A dividend policy"],e:"Directors assess this when preparing statements; material uncertainties must be disclosed."},
+{c:"AU",q:"Disclosure should be prepared and presented in accordance with:",a:["High-quality standards of accounting and financial and non-financial reporting","Management preferences","Local custom only","Whatever reduces tax"],e:"High-quality standards (IFRS, sustainability reporting standards) support comparability."},
+{c:"AU",q:"Which of the following is information that is likely to be 'material'?",a:["Information whose omission or misstatement could influence decisions of users","Any piece of information however trivial","Only confidential contracts","Only legal documents"],e:"Materiality depends on influence on decisions."},
+{c:"AU",q:"Which statement about channels of disclosure is consistent with the OECD?",a:["They should provide equal, timely and cost-efficient access to relevant information for users","They should provide information to selected analysts first","They should be available only at cost to retail shareholders","They should be confidential"],e:"Fair access prevents selective disclosure."},
+{c:"AU",q:"The auditor should be accountable to:",a:["The shareholders and the company, carrying out the audit with due professional care","The CEO personally","Competitors","Customers only"],e:"The OECD says the external auditor should be accountable to shareholders."},
+{c:"AU",q:"Beneficial ownership transparency is intended to:",a:["Reveal who ultimately owns or controls a company and prevent misuse of corporate vehicles","Hide ownership","Increase dividends","Reduce the number of shareholders"],e:"Supports anti-money laundering and prevents abuse."},
+
+/* ---------- Remuneration ---------- */
+{c:"RM",q:"Remuneration policy for board members and key executives should be designed to:",a:["Attract, retain and motivate talent and align interests with the long-term interests of the company and its shareholders","Maximise short-term bonuses","Be kept entirely secret","Reward only seniority"],e:"Alignment with long-term value creation is the core principle."},
+{c:"RM",q:"What is a 'say on pay'?",a:["A shareholder vote on the remuneration policy or report","The CEO decides his own pay","The auditor approves pay","A union vote on board pay"],e:"OECD supports shareholders' ability to have a say on remuneration (binding or advisory)."},
+{c:"RM",q:"Which feature of executive pay can encourage excessive short-term risk-taking?",a:["Large bonuses tied to short-term results without risk adjustment","Long vesting periods","Clawback provisions","Shareholding requirements"],e:"Short-termism can be mitigated by deferral, long-term metrics and clawbacks."},
+{c:"RM",q:"A 'clawback' provision allows a company to:",a:["Recover paid variable pay in cases such as misstatement or misconduct","Increase the CEO's pay","Pay dividends","Buy back shares"],e:"Clawbacks and malus protect against unjustified payouts."},
+{c:"RM",q:"'Malus' refers to:",a:["Reducing or cancelling unvested variable remuneration before payment","Recovering already paid remuneration","Paying more salary","Share splitting"],e:"Malus applies before payment; clawback after."},
+{c:"RM",q:"Why should non-executive directors generally not receive performance-based stock options or large variable pay?",a:["It may compromise their independence and objectivity in oversight","It is illegal everywhere","Because they never own shares","Because they do not work"],e:"Many codes recommend fixed fees, possibly partly paid in shares."},
+{c:"RM",q:"Which body should have mainly independent members and be free of executive influence in setting executive pay?",a:["The remuneration committee","The sales team","The IT department","The investors' newsletter"],e:"Independence avoids conflicts."},
+{c:"RM",q:"Why is pay ratio or internal pay fairness considered in remuneration policy?",a:["It helps to assess internal equity and the acceptability of executive pay relative to the workforce","To reduce taxes","To decide dividends","To fix auditor's fees"],e:"Many reports disclose the CEO-to-employee pay ratio."},
+{c:"RM",q:"Performance criteria in variable pay should preferably be:",a:["Measurable, linked to strategy including long-term and sustainability targets, and disclosed","Vague and discretionary","Set after results are known","Not disclosed to shareholders"],e:"Transparency and alignment with strategy enhance accountability."},
+{c:"RM",q:"What is a 'golden parachute'?",a:["A large payment to an executive on departure, often after change of control","A type of dividend","A board training course","A discount for shareholders"],e:"Excessive termination payments are criticised as rewards for failure."},
+{c:"RM",q:"What should remuneration disclosure include?",a:["Individual remuneration of board members and key executives, or at least aggregate with the policy and components","Nothing","Only the CEO's health data","Only the average salary"],e:"The OECD calls for disclosure of remuneration policy and individual-level data for board members and key executives."},
+{c:"RM",q:"Which approach is best regarding share-based incentive plans?",a:["They should be approved by shareholders and disclosed, with vesting periods and conditions","They should be hidden","They should vest immediately","They should be unlimited"],e:"Approval of equity plans by shareholders is considered best practice."},
+
+/* ---------- Strategy / sustainability / stakeholders ---------- */
+{c:"ST",q:"According to the OECD Principles, the rights of stakeholders established by law or through mutual agreements should be:",a:["Respected","Ignored in favour of shareholders","Waived by the board","Left to employees alone"],e:"The corporate governance framework should recognise and respect stakeholders' rights."},
+{c:"ST",q:"Which of these mechanisms supports employee participation in governance?",a:["Employee representation on the board or works councils, and protected reporting channels","Prohibition of employee consultation","Secret decision making","Prohibiting trade unions"],e:"The Principles say performance-enhancing mechanisms for employee participation should be permitted to develop."},
+{c:"ST",q:"Why should boards consider sustainability and climate-related risks?",a:["They can materially affect strategy, value creation and resilience of the company","They are only about PR","They are relevant only for energy companies","They are irrelevant to risk"],e:"The 2023 OECD Principles emphasise that sustainability matters affect long-term value."},
+{c:"ST",q:"What does ESG stand for?",a:["Environmental, Social and Governance","Economic, Statutory and General","Equity, Shares and Growth","Ethical, Sustainable and Global"],e:"ESG is a framework to assess environmental, social and governance factors."},
+{c:"ST",q:"What is 'double materiality'?",a:["Assessing both how sustainability matters affect the company and how the company affects people and the environment","Counting a risk twice","Reporting twice a year","A tax rule"],e:"It underlies the EU Corporate Sustainability Reporting Directive (CSRD) and ESRS."},
+{c:"ST",q:"What is 'greenwashing'?",a:["Misleading claims that exaggerate environmental credentials","A cleaning programme","Legitimate climate reporting","A tax benefit"],e:"Boards need to ensure sustainability claims are accurate and substantiated."},
+{c:"ST",q:"What is 'stakeholder capitalism' about?",a:["Companies creating value for all stakeholders, not only shareholders, as part of long-term success","Only maximising shareholder wealth in the quarter","Eliminating profit","Government ownership of all companies"],e:"Many modern codes require boards to consider stakeholders for long-term sustainable value."},
+{c:"ST",q:"The OECD suggests that, to strengthen stakeholder relations, companies should:",a:["Provide stakeholders with access to relevant information on a timely and regular basis","Hide their policies","Avoid dialogue","Dismiss complaints"],e:"Access to information is needed for stakeholders to exercise rights."},
+{c:"ST",q:"Which instrument is most associated with climate-related financial disclosure?",a:["TCFD recommendations (now integrated into ISSB standards)","IFRS 9 only","The Basel I accord","ISO 9001"],e:"TCFD recommended four pillars: governance, strategy, risk management, metrics and targets."},
+{c:"ST",q:"Which concept links corporate strategy to long-term value creation, over a time horizon beyond the next quarter?",a:["Long-term sustainable value creation","Quarterly earnings management","Window dressing","Tax avoidance"],e:"Boards should balance short-term and long-term interests."},
+{c:"ST",q:"How should the board approach strategy?",a:["Challenge, approve and monitor strategy, with management proposing and executing it","Leave it entirely to management","Write it without management input","Ignore risks"],e:"Strategy is a joint process; the board supervises and challenges."},
+{c:"ST",q:"Human rights due diligence refers to:",a:["Identifying, preventing and addressing adverse human rights impacts in a company's operations and supply chain","Counting employees","Tax planning","Paying dividends"],e:"Reflected in OECD Guidelines for Multinational Enterprises and UN Guiding Principles."},
+{c:"ST",q:"Which OECD instrument covers responsible business conduct for multinational enterprises?",a:["OECD Guidelines for Multinational Enterprises","OECD Pension Rules","OECD Postal Convention","OECD Travel Guidelines"],e:"The Guidelines are government-backed recommendations for responsible business conduct."},
+
+/* ---------- Conflicts / RPT / control ---------- */
+{c:"RP",q:"What is a related-party transaction?",a:["A transaction between the company and a person or entity with influence over it, such as a director, major shareholder or their close relatives or affiliates","Any transaction with a customer","A transaction with the tax authority","A transaction approved by the auditors"],e:"RPTs carry a risk of self-dealing and need disclosure and controls."},
+{c:"RP",q:"Which safeguard is most appropriate for a material related-party transaction?",a:["Disclosure and approval by independent directors or disinterested shareholders, on arm's-length terms","Approval by the interested party alone","Non-disclosure","Immediate execution without review"],e:"Interested persons should not approve their own deals; terms should be arm's length."},
+{c:"RP",q:"'Arm's length' terms means:",a:["Terms comparable to those between independent, unrelated parties","Terms that favour the related party","Terms agreed verbally","Terms set by the CEO"],e:"It is a key test for related-party dealings."},
+{c:"RP",q:"What is the main danger of related-party transactions?",a:["Value being transferred from the company and minority shareholders to insiders","They always increase profits","They reduce tax to zero","They reduce risk"],e:"Tunnelling and self-dealing harm minority investors."},
+{c:"RP",q:"Which is an example of a conflict of interest for a board member?",a:["Director's own company bidding for a contract with the company","Director reading board papers","Director attending training","Director asking questions"],e:"Direct or indirect personal interests must be disclosed and managed."},
+{c:"RP",q:"What is a hostile takeover bid?",a:["An offer made to shareholders to buy control without the agreement of the target's board","A friendly merger","A donation","A stock split"],e:"Boards must consider the interests of shareholders and not entrench themselves."},
+{c:"RP",q:"During a takeover bid, what is the proper approach of the target board regarding defensive measures?",a:["Act in the interest of the company and shareholders and not use anti-takeover devices only to entrench management","Block every offer automatically","Hide the offer from shareholders","Accept the first offer"],e:"Anti-takeover devices should not be used to shield management from accountability."},
+{c:"RP",q:"A mandatory takeover bid rule means that:",a:["A person crossing a control threshold must offer to buy the shares of the other shareholders on equitable terms","Takeovers are banned","Everyone must buy shares","The company must delist"],e:"It protects minority shareholders when control changes."},
+{c:"RP",q:"What is a 'squeeze-out'?",a:["A procedure allowing a majority shareholder to buy out remaining minority shareholders at a fair price once a high threshold is reached","A salary cut","A share buyback","A merger of two banks"],e:"Typically available above a high ownership threshold (e.g. 90–95%) with fair compensation."},
+{c:"RP",q:"Why should boards be cautious about share buybacks and special dividends from the governance perspective?",a:["They can be misused to benefit certain shareholders or insiders unless done equitably and transparently","They are illegal","They are always required","They never affect equity"],e:"Equal treatment and proper authorisation are required."},
+{c:"RP",q:"What is a 'poison pill'?",a:["A defensive tactic making a takeover prohibitively expensive","A type of dividend","An audit opinion","A governance code"],e:"Pills must be used cautiously because they may entrench management."},
+{c:"RP",q:"The treatment of the interests of the controlling shareholder in a company with a dominant owner should:",a:["Be balanced by independent directors who protect all shareholders","Override the board always","Be hidden","Be decided by management alone"],e:"Controlled companies require strong safeguards for minority shareholders."},
+{c:"RP",q:"Which of the following is a state-owned enterprise governance principle in OECD Guidelines?",a:["The state should act as an informed and active owner and separate its ownership function from regulatory functions","The state should interfere in daily operations","SOE boards should have no independence","SOEs should be exempt from disclosure"],e:"OECD Guidelines on Corporate Governance of State-Owned Enterprises call for a clear separation of roles."},
+
+/* ---------- more mix ---------- */
+{c:"OECD",q:"Which of the following is a feature of good corporate governance that increases investor confidence?",a:["Accountability, transparency, fairness and responsibility","Opacity and discretion","Concentrated, unchecked authority","Short-term bonus focus"],e:"These are the commonly cited four pillars of good governance."},
+{c:"OECD",q:"Who are 'institutional investors'?",a:["Pension funds, insurers, mutual funds and asset managers investing on behalf of others","Individual retail traders","The company's employees","Customers"],e:"Their stewardship role is dealt with in Principle III."},
+{c:"OECD",q:"What is 'stewardship' by investors?",a:["Responsible allocation, management and oversight of capital to create long-term value, including engagement and voting","Short-term speculation","Ignoring governance","Disposing of all holdings"],e:"Stewardship codes encourage active ownership."},
+{c:"OECD",q:"Which of the following is an important function of stock markets under the Principles?",a:["Providing fair price discovery and protecting investors from abuse","Protecting insiders","Hiding transactions","Promoting only dual-class shares"],e:"Listing rules and market supervision support integrity and transparency."},
+{c:"OECD",q:"Proxy advisors should be:",a:["Transparent about their methodologies and manage conflicts of interest","Secret about their methods","Exempt from conflicts rules","Controlled by issuers"],e:"The Principles encourage disclosure about proxy advisor methods and conflicts."},
+{c:"BR",q:"What should a board do on discovering that management has misled it?",a:["Investigate promptly, take appropriate action and consider disclosure and regulatory implications","Ignore it to avoid disruption","Hide it from auditors","Wait until the next AGM"],e:"Boards have to act decisively on integrity breaches."},
+{c:"BR",q:"CEO succession planning should be:",a:["A continuous board responsibility including emergency and long-term planning","Left for the CEO to decide alone","Considered only after resignation","Prohibited"],e:"Succession planning protects continuity."},
+{c:"BR",q:"The board's role in crisis management is to:",a:["Ensure that management has a plan, oversee the response and make key decisions","Run the crisis response operationally","Avoid involvement","Leave it to the media team"],e:"Board oversees; management leads the operational response."},
+{c:"BR",q:"Which of the following is a typical reserved matter for the board?",a:["Approving annual budget, major investments and risk appetite","Choosing office furniture","Approving routine travel","Everyday customer calls"],e:"Reserved matters define what only the board can decide."},
+{c:"BS",q:"What is a 'staggered' (classified) board?",a:["Only a portion of directors are elected each year","All directors are elected every year","Directors are not elected","The board has no committees"],e:"Staggered boards can reduce accountability and make takeovers harder."},
+{c:"BS",q:"Which composition is generally preferable for a nomination committee?",a:["Majority independent non-executives","Only executives","Only the CEO","Only large customers"],e:"Independent nomination avoids self-perpetuation."},
+{c:"BS",q:"The ideal size of a board is:",a:["Large enough for diversity and committees yet small enough for effective discussion","As large as possible","One person","Always exactly 20"],e:"Typical listed boards range from 5 to 12."},
+{c:"BS",q:"What does 'overboarding' mean?",a:["A director holding so many mandates that effectiveness may be compromised","A board holding too many meetings","Boarding a plane","Overpaying directors"],e:"Codes and proxy guidelines often limit the number of mandates."},
+{c:"DU",q:"A director who is dissatisfied with a board decision believes it is unlawful. What should they do?",a:["Record the objection, seek advice and, if unresolved, consider resigning and escalating as legally required","Remain silent","Join in to preserve harmony","Destroy documents"],e:"Dissent should be recorded and acted on professionally."},
+{c:"DU",q:"Collective responsibility of the board means:",a:["All directors share responsibility for board decisions and should speak with one voice once decided","Only the chair is responsible","Only executives are liable","Directors are never liable"],e:"After debate, a decision is the board's decision."},
+{c:"RK",q:"What does a 'risk-based approach' to internal audit planning mean?",a:["Focusing audit work on the areas of greatest risk to objectives","Auditing everything equally every year","Auditing only low-risk areas","Auditing only on request by the CEO"],e:"Resources are allocated according to risk."},
+{c:"RK",q:"Fraud risk typically increases when there are:",a:["Pressure, opportunity and rationalisation (the fraud triangle)","Strong controls and culture","Independent oversight","Regular training"],e:"The fraud triangle: pressure, opportunity, rationalisation."},
+{c:"RK",q:"Anti-money-laundering (AML) obligations require companies to:",a:["Know their customers and report suspicious transactions where covered","Hide transaction records","Avoid all reporting","Process cash only"],e:"Regulated entities must perform due diligence and report suspicious activity."},
+{c:"AU",q:"Integrated reporting links:",a:["Financial and non-financial information to show how value is created over time","Only tax data","Only share prices","Only employee numbers"],e:"It explains strategy, governance, performance and prospects."},
+{c:"AU",q:"What is the purpose of the management report (directors' report) accompanying financial statements?",a:["To give a fair review of the business, its position and principal risks and uncertainties","To replace the audit","To report personal tax of directors","To list share prices"],e:"The management report provides narrative context."},
+{c:"AU",q:"Audit firm rotation (mandatory rotation) is meant to:",a:["Reduce familiarity threats and strengthen auditor independence","Increase audit fees","Prevent all fraud","Replace internal audit"],e:"EU rules require rotation for public interest entities after a maximum period (generally 10 years, with extensions possible)."},
+{c:"RM",q:"Which describes fixed versus variable pay?",a:["Fixed pay is guaranteed salary; variable pay depends on performance or conditions","Fixed pay changes with results; variable pay does not","They are the same","Variable pay is always paid"],e:"A balanced mix limits excessive risk-taking."},
+{c:"RM",q:"Why should the pay of directors be disclosed in a transparent manner?",a:["To let shareholders assess whether pay is aligned with performance and strategy","To embarrass directors","To avoid audits","To raise wages"],e:"Transparency enables accountability."},
+{c:"ST",q:"Which of the following is a 'social' factor in ESG?",a:["Employee health and safety","Board independence","Carbon emissions","Anti-corruption policy"],e:"Social factors include workforce, human rights, community; carbon is environmental; board independence and anti-corruption are governance."},
+{c:"ST",q:"Which of the following is an 'environmental' factor in ESG?",a:["Greenhouse gas emissions","Gender pay gap","Board composition","Audit committee independence"],e:"Environmental factors include emissions, energy, waste, biodiversity and water."},
+{c:"ST",q:"Which of the following is a 'governance' factor in ESG?",a:["Board independence and shareholder rights","Water use","Carbon emissions","Community investment"],e:"Governance covers structures and processes of oversight and control."},
+{c:"ST",q:"Which directive introduced extended sustainability reporting requirements in the EU?",a:["Corporate Sustainability Reporting Directive (CSRD)","MiFID II only","The Late Payment Directive","The Bus Passenger Rights Regulation"],e:"CSRD expanded sustainability reporting and requires ESRS reporting with assurance."},
+{c:"RP",q:"If a director's relative is proposed as a supplier to the company, the director should:",a:["Disclose the relationship and not participate in the decision","Vote in favour","Conceal the relationship","Ask the CEO to choose them informally"],e:"Interests of close relatives are treated as the director's own for conflicts purposes."},
+{c:"RP",q:"Why are insider lists and trading windows (closed periods) used?",a:["To prevent trading on inside information, especially around results announcements","To increase trading","To hide results","To lower taxes"],e:"Market abuse regulation (MAR) requires insider lists and restricts managers' transactions in closed periods."},
+{c:"SH",q:"Which of the following can an annual general meeting (AGM) normally decide?",a:["Approval of the annual report, distribution of profit, election of auditors and members of supervisory board","Daily purchases","Setting each employee's pay","Product design"],e:"The general meeting is the highest body of shareholders; competence is set by law and statutes."},
+{c:"SH",q:"What is an extraordinary general meeting (EGM)?",a:["A shareholder meeting held outside the regular AGM schedule to decide on urgent or special matters","A meeting of employees","A meeting of auditors","A regulatory inspection"],e:"EGMs can be called by the board or shareholders holding a statutory share."},
+{c:"SH",q:"A dividend policy should be:",a:["Communicated clearly and applied equitably across shareholders of the same class","Hidden from shareholders","Changed without notice","Only for large holders"],e:"Equitable treatment applies to distributions."},
+{c:"OECD",q:"When there is a conflict between shareholders' and stakeholders' interests, a board should:",a:["Exercise judgement in the best interest of the company, balancing interests and obeying the law","Always favour shareholders in the short term","Ignore both","Always favour the largest creditor"],e:"Balancing is a board responsibility."},
+{c:"OECD",q:"What is the 'agency problem' in corporate governance?",a:["Conflict of interest between those who own a company (principals) and those who manage it (agents)","A problem with travel agencies","A tax issue","A software bug"],e:"Governance mechanisms such as boards, incentives and disclosure aim to reduce agency costs."},
+{c:"OECD",q:"What is the 'principal–principal' agency problem?",a:["Conflict between controlling and minority shareholders","Conflict between auditors and regulators","Conflict between customers and suppliers","Conflict between two CEOs"],e:"Typical in companies with concentrated ownership."}
+];
+
+/* ---- Cleanup of a stray typo-prone wording is avoided by validating the bank at load ---- */
+(function validate(){
+  BANK.forEach((x,i)=>{
+    x.id = i;
+    if(!TOPICS[x.c]||!x.q||x.a.length!==4||new Set(x.a).size!==4||!x.e) console.error("Bad question",i,x);
+  });
+})();
+
+/* ---------- utilities ---------- */
+const $ = id => document.getElementById(id);
+function rnd(n){ // unbiased random int in [0,n)
+  if(window.crypto&&crypto.getRandomValues){
+    const lim=Math.floor(4294967296/n)*n, b=new Uint32Array(1);
+    do{crypto.getRandomValues(b);}while(b[0]>=lim);
+    return b[0]%n;
+  }
+  return Math.floor(Math.random()*n);
+}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
+const LS="bicg-seen-v1";
+function loadSeen(){try{return JSON.parse(localStorage.getItem(LS))||{};}catch(e){return {};}}
+function saveSeen(s){try{localStorage.setItem(LS,JSON.stringify(s));}catch(e){}}
+
+/* ---------- question selection ----------
+   1. Group by topic. 2. Distribute N as evenly as possible across topics (random topic order for remainders).
+   3. In each topic prefer the least-seen questions (random tie-break). 4. Shuffle order and answers. */
+function pickQuestions(n, pool){
+  pool = pool||BANK;
+  const seen = loadSeen();
+  const byTopic = {};
+  pool.forEach(q=>(byTopic[q.c]=byTopic[q.c]||[]).push(q));
+  const topics = shuffle(Object.keys(byTopic));
+  n = Math.min(n,pool.length);
+  const quota = {}; topics.forEach(t=>quota[t]=0);
+  let left=n;
+  while(left>0){
+    let progressed=false;
+    for(const t of topics){
+      if(left===0)break;
+      if(quota[t]<byTopic[t].length){quota[t]++;left--;progressed=true;}
+    }
+    if(!progressed)break;
+  }
+  let chosen=[];
+  topics.forEach(t=>{
+    const ranked = shuffle(byTopic[t]).sort((a,b)=>(seen[a.id]||0)-(seen[b.id]||0));
+    chosen=chosen.concat(ranked.slice(0,quota[t]));
+  });
+  return shuffle(chosen).map(q=>{
+    const opts = shuffle(q.a.map((t,i)=>({t,ok:i===0})));
+    return {id:q.id,c:q.c,q:q.q,e:q.e,opts,pick:null};
+  });
+}
+
+/* ---------- state ---------- */
+let SIZE=20, MODE="exam", PASS=70, Q=[], idx=0, t0=0, timerH=null;
+function readPass(){
+  const v=Math.round(Number($("passmark").value));
+  PASS = (v>=1&&v<=100)?v:70;
+  $("passmark").value=PASS;
+  try{localStorage.setItem("bicg-pass",PASS);}catch(e){}
+}
+try{const p=Number(localStorage.getItem("bicg-pass"));if(p>=1&&p<=100)$("passmark").value=p;}catch(e){}
+
+/* ---------- start screen ---------- */
+const SIZES=[10,20,40,60];
+const sizesEl=$("sizes");
+SIZES.forEach(n=>{
+  const b=document.createElement("button");
+  b.className="size"+(n===SIZE?" on":"");
+  b.innerHTML=n+"<small>questions</small>";
+  b.onclick=()=>{SIZE=n;[...sizesEl.children].forEach(c=>c.classList.remove("on"));b.classList.add("on");};
+  sizesEl.appendChild(b);
+});
+$("bankinfo").textContent = BANK.length+" questions in the bank across "+Object.keys(TOPICS).length+" topics.";
+document.querySelectorAll("input[name=mode]").forEach(r=>r.onchange=()=>{MODE=r.value;});
+
+function show(id){["start","quiz","result"].forEach(x=>$(x).hidden=x!==id);window.scrollTo(0,0);}
+
+function startTest(list){
+  Q=list; idx=0; t0=Date.now();
+  const seen=loadSeen(); Q.forEach(q=>seen[q.id]=(seen[q.id]||0)+1); saveSeen(seen);
+  clearInterval(timerH); timerH=setInterval(tick,1000); tick();
+  show("quiz"); render();
+}
+$("go").onclick=()=>{readPass();startTest(pickQuestions(SIZE));};
+
+function tick(){
+  const s=Math.floor((Date.now()-t0)/1000);
+  $("timer").textContent="⏱ "+String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
+}
+
+/* ---------- quiz rendering ---------- */
+function render(){
+  const q=Q[idx];
+  $("qcount").textContent="Question "+(idx+1)+" of "+Q.length;
+  $("prog").style.width=((idx+1)/Q.length*100)+"%";
+  $("qcat").textContent=TOPICS[q.c];
+  $("qtext").textContent=q.q;
+  const box=$("answers"); box.textContent="";
+  const reveal = MODE==="practice" && q.pick!==null;
+  q.opts.forEach((o,i)=>{
+    const b=document.createElement("button");
+    b.className="ans";
+    if(reveal){ if(o.ok)b.classList.add("good"); else if(i===q.pick)b.classList.add("bad"); }
+    else if(q.pick===i) b.classList.add("sel");
+    const k=document.createElement("span");k.className="k";k.textContent=String.fromCharCode(65+i);
+    const t=document.createElement("span");t.textContent=o.t;
+    b.append(k,t);
+    b.disabled = reveal;
+    b.onclick=()=>choose(i);
+    box.appendChild(b);
+  });
+  const ex=$("expl");
+  if(reveal){ex.hidden=false;ex.textContent=(q.opts[q.pick].ok?"✓ Correct. ":"✗ Incorrect. ")+q.e;}
+  else ex.hidden=true;
+  $("prev").disabled=idx===0;
+  const last=idx===Q.length-1;
+  $("next").textContent=last?"Finish ✓":"Next →";
+  const dots=$("dots"); dots.textContent="";
+  Q.forEach((x,i)=>{
+    const d=document.createElement("button");
+    d.textContent=i+1;
+    if(x.pick!==null)d.classList.add("done");
+    if(i===idx)d.classList.add("cur");
+    d.onclick=()=>{idx=i;render();};
+    dots.appendChild(d);
+  });
+}
+function choose(i){ Q[idx].pick=i; render(); }
+$("prev").onclick=()=>{if(idx>0){idx--;render();}};
+$("next").onclick=()=>{
+  if(idx<Q.length-1){idx++;render();return;}
+  const un=Q.filter(q=>q.pick===null).length;
+  if(un>0 && !$("next").dataset.armed){
+    $("next").dataset.armed="1";
+    $("next").textContent=un+" unanswered – click again to finish";
+    return;
+  }
+  finish();
+};
+$("quit").onclick=()=>{
+  if($("quit").dataset.armed){clearInterval(timerH);delete $("quit").dataset.armed;$("quit").textContent="Abandon test";show("start");}
+  else{$("quit").dataset.armed="1";$("quit").textContent="Click again to confirm abandon";}
+};
+document.addEventListener("keydown",e=>{
+  if($("quiz").hidden)return;
+  if(e.key>="1"&&e.key<="4"){const i=+e.key-1;if(Q[idx].opts[i]&&!(MODE==="practice"&&Q[idx].pick!==null))choose(i);}
+  else if(e.key==="ArrowRight")$("next").click();
+  else if(e.key==="ArrowLeft")$("prev").click();
+});
+
+/* ---------- results ---------- */
+function finish(){
+  clearInterval(timerH);
+  delete $("next").dataset.armed; delete $("quit").dataset.armed; $("quit").textContent="Abandon test";
+  const total=Q.length, ok=Q.filter(q=>q.pick!==null&&q.opts[q.pick].ok).length;
+  const pct=Math.round(ok/total*100);
+  const secs=Math.floor((Date.now()-t0)/1000);
+  $("rscore").textContent=ok+" / "+total+"  ("+pct+"%)";
+  const passed=pct>=PASS;
+  $("rscore").style.color=passed?"var(--good)":"var(--bad)";
+  $("rline").textContent=(passed?"PASSED":"NOT PASSED")+" – pass mark "+PASS+"% ("+Math.ceil(total*PASS/100)+" of "+total+" correct needed). "+
+    "Time: "+Math.floor(secs/60)+" min "+(secs%60)+" s.";
+  const cats={};
+  Q.forEach(q=>{const c=cats[q.c]=cats[q.c]||{n:0,ok:0};c.n++;if(q.pick!==null&&q.opts[q.pick].ok)c.ok++;});
+  const rc=$("rcats"); rc.textContent="";
+  Object.keys(cats).sort((a,b)=>cats[a].ok/cats[a].n-cats[b].ok/cats[b].n).forEach(k=>{
+    const c=cats[k], p=Math.round(c.ok/c.n*100);
+    const row=document.createElement("div");row.className="catrow";
+    const l=document.createElement("span");l.textContent=TOPICS[k];
+    const r=document.createElement("span");r.style.textAlign="right";r.textContent=c.ok+"/"+c.n+" · "+p+"%";
+    const bar=document.createElement("div");bar.className="bar";
+    const i=document.createElement("i");i.style.width=p+"%";bar.appendChild(i);
+    row.append(l,r,bar);rc.appendChild(row);
+  });
+  $("retrywrong").disabled = ok===total;
+  renderReview();
+  show("result");
+}
+function renderReview(){
+  const only=$("onlywrong").checked, rv=$("review"); rv.textContent="";
+  Q.forEach((q,n)=>{
+    const good=q.pick!==null&&q.opts[q.pick].ok;
+    if(only&&good)return;
+    const d=document.createElement("div");d.className="rev";
+    const h=document.createElement("div");
+    const tag=document.createElement("span");
+    tag.className="tag "+(good?"ok":q.pick===null?"skip":"no");
+    tag.textContent=good?"✓ Correct":q.pick===null?"– Skipped":"✗ Incorrect";
+    h.append(tag," · Q"+(n+1)+" · "+TOPICS[q.c]);
+    h.className="hint";
+    const qq=document.createElement("div");qq.className="q";qq.textContent=q.q;
+    const ul=document.createElement("div");ul.className="answers";
+    q.opts.forEach((o,i)=>{
+      const b=document.createElement("div");b.className="ans";
+      if(o.ok)b.classList.add("good"); else if(i===q.pick)b.classList.add("bad");
+      const k=document.createElement("span");k.className="k";k.textContent=String.fromCharCode(65+i);
+      const t=document.createElement("span");
+      t.textContent=o.t+(o.ok?"  ✓":"")+(i===q.pick&&!o.ok?"  (your answer)":"");
+      b.append(k,t);ul.appendChild(b);
+    });
+    const ex=document.createElement("div");ex.className="expl";ex.textContent=q.e;
+    d.append(h,qq,ul,ex);rv.appendChild(d);
+  });
+  if(!rv.children.length)rv.textContent="Nothing to show – all questions answered correctly.";
+}
+$("onlywrong").onchange=renderReview;
+$("again").onclick=()=>show("start");
+$("retrywrong").onclick=()=>{
+  const wrong=Q.filter(q=>!(q.pick!==null&&q.opts[q.pick].ok)).map(q=>BANK[q.id]);
+  if(!wrong.length)return;
+  startTest(pickQuestions(wrong.length,wrong));
+};
+</script>
+</body>
+</html>
